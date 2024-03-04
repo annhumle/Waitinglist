@@ -1,0 +1,4 @@
+version: "3"
+services: 
+  waiting-list:
+    image: waiting-list-scraber:latest
