@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 last_send_time = []
 
 def is_open():
@@ -19,13 +19,17 @@ def is_open():
 
     soup = BeautifulSoup(page.content, "html.parser")
     tds = soup.find_all("td")[2:]
+    for e in tds:
+        logging.info(e)
+    
     status = tds[1::2]
     for s in status:
         if not "Lukket" in s:
             return True
-    return True
+    return False
 
 def job():
+    logging.info("~~~~~~~~~~~~~~~ Staring Job ~~~~~~~~~~~~~~~~")
     if is_open():
         logging.info("List is open")
         if check_if_sms(120):
@@ -60,7 +64,7 @@ def main():
     schedule.every(300).seconds.do(job)
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(10)
 
 if __name__ == "__main__":
     main()
