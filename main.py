@@ -61,10 +61,10 @@ def send_sms(recipients, message):
     resp.raise_for_status
 
 def main():
-    schedule.every(300).seconds.do(job)
+    schedule.every(30).seconds.do(job)
     while True:
         schedule.run_pending()
-        time.sleep(10)
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
