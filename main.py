@@ -68,7 +68,7 @@ def send_sms(recipients, message):
 
 def main():
     schedule.every(30).seconds.do(job)
-    while True and not exit:
+    while not exit:
         schedule.run_pending()
         time.sleep(1)
 
