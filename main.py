@@ -7,9 +7,15 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 last_send_time = []
+exit = False
 
 def is_open():
-    page = requests.get("https://findbolig.nu/da-dk/udlejere")
+    try:
+        page = requests.get("https://findbolig.nu/da-dk/udlejere", timeout=10)
+    except requests.exceptions.Timeout as e:
+        logging.info("Request timed out. Crashing container")
+        exit = True
+    
     if not page.status_code == 200:
         if check_if_sms(3600):
             send_sms(["4542436150"], "Shit, vi er blokeret!")
@@ -62,7 +68,7 @@ def send_sms(recipients, message):
 
 def main():
     schedule.every(30).seconds.do(job)
-    while True:
+    while True and not exit:
         schedule.run_pending()
         time.sleep(1)
 
