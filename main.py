@@ -12,8 +12,12 @@ exit = False
 def is_open():
     try:
         page = requests.get("https://findbolig.nu/da-dk/udlejere", timeout=10)
+   
+    except requests.exceptions.ConnectionError as e:
+        logging.info("Error connecting. Exit container.")
+        exit = True
     except requests.exceptions.Timeout as e:
-        logging.info("Request timed out. Crashing container")
+        logging.info("Request timed out. Exit container.")
         exit = True
     
     if not page.status_code == 200:
