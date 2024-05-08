@@ -16,9 +16,11 @@ def is_open():
     except requests.exceptions.ConnectionError as e:
         logging.info("Error connecting. Exit container.")
         exit = True
+        return
     except requests.exceptions.Timeout as e:
         logging.info("Request timed out. Exit container.")
         exit = True
+        return
     
     if not page.status_code == 200:
         if check_if_sms(3600):
